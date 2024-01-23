@@ -138,7 +138,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/new" element={<New />} />
-              <Route path="/edit" element={<Edit />} />
+              <Route path="/edit/:id" element={<Edit />} />
               <Route path="/diary/:id" element={<Diary />} />
               {/* :id를 쓰는 이유는 특정 아이디를 가지고 있는 다이어리를 수정하기위해 */}
             </Routes>

@@ -1,7 +1,15 @@
-import React from "react";
+import DiaryEditor from "../components/DiaryEditor";
 
-function New() {
-  return <div>일기 작성페이지</div>;
-}
+const getStringDate = (date) => {
+  return date.toISOString().slice(0, 10);
+};
+
+const New = () => {
+  return (
+    <div>
+      <DiaryEditor />
+    </div>
+  );
+};
 
 export default New;
