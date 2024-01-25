@@ -38,7 +38,7 @@ const ControlMenu = ({ value, onChange, optionList }) => {
 
 const DiaryList = ({ diaryList }) => {
   const navigate = useNavigate();
-  const [sortType, setSortType] = useState("lastest");
+  const [sortType, setSortType] = useState("latest");
   const [filter, setFilter] = useState("all");
 
   const getProcecssedDiaryList = () => {
@@ -64,6 +64,7 @@ const DiaryList = ({ diaryList }) => {
       filter === "all" ? copyList : copyList.filter((it) => filterCallBack(it));
 
     const sortedList = filteredList.sort(compare);
+
     return sortedList;
   };
 

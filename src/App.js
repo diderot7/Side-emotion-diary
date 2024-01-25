@@ -1,4 +1,4 @@
-import React, { useReducer, useRef, createContext } from "react"; // eslint-disable-line no-unused-vars
+import React, { useReducer, useRef, createContext, useEffect } from "react"; // eslint-disable-line no-unused-vars
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -32,46 +32,26 @@ const reducer = (state, action) => {
     default:
       return state;
   }
+  localStorage.setItem("diary", JSON.stringify(newState));
   return newState;
 };
 
 export const DiaryStateContext = React.createContext(); // 데이터 전달 컨텍스트
 export const DiaryDispatchContext = React.createContext(); //함수전달 컨텍스트
 
-const dummyData = [
-  {
-    id: 1,
-    emotion: 1,
-    content: "오늘의 일기 1번",
-    date: 1705924086777,
-  },
-  {
-    id: 2,
-    emotion: 2,
-    content: "오늘의 일기 2번",
-    date: 1705924086778,
-  },
-  {
-    id: 3,
-    emotion: 3,
-    content: "오늘의 일기 3번",
-    date: 1705924086779,
-  },
-  {
-    id: 4,
-    emotion: 4,
-    content: "오늘의 일기 4번",
-    date: 1705924086780,
-  },
-  {
-    id: 5,
-    emotion: 5,
-    content: "오늘의 일기 5번",
-    date: 1705924086781,
-  },
-];
 function App() {
-  const [data, dispatch] = useReducer(reducer, dummyData);
+  const [data, dispatch] = useReducer(reducer, []);
+
+  useEffect(() => {
+    const localData = localStorage.getItem("diary");
+    if (localData) {
+      const diaryList = JSON.parse(localData).sort(
+        (a, b) => parseInt(b.id) - parseInt(a.id)
+      );
+      dataId.current = parseInt(diaryList[0].id) + 1;
+      dispatch({ type: "INIT", data: diaryList });
+    }
+  }, []);
 
   const dataId = useRef(0);
   //create
@@ -92,14 +72,14 @@ function App() {
     dispatch({ type: "REMOVE", targetId });
   };
   //edit
-  const onEdit = (targetId, date, content, emotion) => {
+  const onEdit = (targetId, emotion, content, date) => {
     dispatch({
       type: "EDIT",
       data: {
         id: targetId,
-        date: new Date(date).getTime(),
-        content,
         emotion,
+        content,
+        date: new Date(date).getTime(),
       },
     });
   };
@@ -116,25 +96,6 @@ function App() {
       >
         <BrowserRouter>
           <div className="App">
-            {/* <MyHeader
-          headText={"App"}
-          leftChild={
-            <MyButton text={"왼쪽 버튼"} onClick={() => alert("왼쪽 클릭")} />
-          }
-          rigthChild={<MyButton text={"오른쪽 버튼"} />}
-        />
-        <h2>App.js</h2>
-        <MyButton
-          text={"버튼"}
-          onClick={() => alert("버튼클릭")}
-          type={"positive"}
-        />
-        <MyButton
-          text={"버튼"}
-          onClick={() => alert("버튼클릭")}
-          type={"negative"}
-        />{" "}
-        <MyButton text={"버튼"} onClick={() => alert("버튼클릭")} /> */}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/new" element={<New />} />
